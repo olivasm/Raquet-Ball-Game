@@ -1,0 +1,106 @@
+void setup() {
+
+  size(1040,560);
+  gap=height-30;
+  textAlign(CENTER,CENTER);
+  textSize(30);
+}
+
+
+  float circleX=random(width);//random starting X coord of Circle
+  float circleY=height*.10;// keep the ball starting at the top of the window
+  float gap;
+  float circleColorR;// color variable for red scale
+  float circleColorG;// color variable for Green scale
+  float circleColorB;// color variable for Blue scale
+  float paddleX;// variable for paddle X movement 
+  boolean MoveRight; //variable for right direction movement of ball
+  boolean MoveDown;// variable for left direction movement of ball 
+  float LeftOrRight=random(-1,1);//ball goes left or right intially 
+  float BallSpeedX= LeftOrRight*4;//variable for X speed of the ball 
+  float BallSPeedY=4;//variable for Y speed of the ball 
+  float paddleHeight=20; //paddle height 
+  float paddleWidth=100; // paddle width 
+  int score=0;
+  boolean gameover=false;
+  
+
+  
+
+
+void draw() {
+  circleColorR=random(255);//random R color
+  circleColorG=random(255);//random G color
+  circleColorB=random(255);// random B color
+  paddleX=mouseX;// for movement of paddle with mouse
+ if(mousePressed==false){
+  background(50); // when mouse is pressed redraws background and get rainbow effect
+ }
+  rectMode(CENTER);
+  fill(255);//paddle color
+  paddleX=constrain(paddleX,paddleWidth/2,width-(paddleWidth/2));//constraining paddle X so it doesn't go beyond the borders of the window
+  rect(paddleX,gap,paddleWidth,paddleHeight);//paddle 
+  
+   fill(circleColorR,circleColorG,circleColorB);//circle color
+  ellipse(circleX,circleY,20,20);//drawing the actual circle 
+  
+  fill(0,255,255);//scoreboard color
+  text("SCORE",width*.83,height*.15);//scoreboard
+ text(score,width*.95,height*.15);
+ 
+ if(circleY>=gap+30){
+   gameover=true;
+ }
+ 
+ if(gameover==false){
+ 
+ 
+ if(MoveRight==true){
+ circleX= circleX+ BallSpeedX; //ball moves right 
+ }
+ else{
+   circleX=circleX-BallSpeedX;//ball moves left
+ }
+ 
+ if(MoveDown==true){
+   circleY=circleY+BallSPeedY;//ball moves down
+ }
+ else{
+   circleY=circleY-BallSPeedY;//ball Moves up
+ }
+ if(circleY<=10){ //ball bounces down when hits the top
+   MoveDown=true;
+ }
+ if(circleY>=gap-20 && circleX>=mouseX-(paddleWidth/2) && circleX<=mouseX+(paddleWidth/2)){ //ball bounces up when hits paddle
+   MoveDown=false;
+   BallSPeedY++;//ball speeds up in Y direction after hitting paddle
+   BallSpeedX++; //ball speeds up in X direction after hitting paddle
+   score++; //score increases by 1 everytime ball hits paddle
+ }
+ if(circleX<=10 && circleY<height) { //ball moves right when hits left
+   MoveRight=true;
+ }
+ if(circleX>=width-10 && circleY<height){ //ball moves left when hits right
+   MoveRight=false;
+ }
+ }
+ else{  //intiates  the game over screen 
+   fill(255,0,0);
+   text("GAME OVER",width/2,height/2);
+   text("Press any key to play again",width*.5,height*.6);
+   BallSPeedY=0; //stops ball from moving
+   BallSpeedX=0;  //stops ball from moving
+ }
+ if(keyPressed && gameover==true){ //resets the game and its intial values so you can play again
+   circleX=random(width);
+   circleY=height*.10;
+   LeftOrRight=random(-1,1);
+   BallSpeedX= LeftOrRight*4;
+    BallSPeedY=4;
+    gameover=false;
+    score=0;
+ }
+   
+   
+  
+}
